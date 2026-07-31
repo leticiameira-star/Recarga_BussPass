@@ -1,65 +1,112 @@
+CREATE DATABASE IF NOT EXISTS busspay;
+USE busspay;
 
-
-CREATE DATABASE IF NOT EXISTS transporte_publico;
-USE transporte_publico;
-
+-- ============================================
 CREATE TABLE usuario (
-    id_usuario INT AUTO_INCREMENT PRIMARY KEY,
-    nome VARCHAR(100) NOT NULL,
-    sobrenome VARCHAR(100) NOT NULL,
-    email VARCHAR(150) NOT NULL UNIQUE,
-    telefone varchar(11) NOT NULL,
-    cpf varchar(11) NOT NULL UNIQUE,
-    senha VARCHAR(30) NOT NULL
+    id    INT AUTO_INCREMENT PRIMARY KEY,
+    nome  VARCHAR(100) NOT NULL,
+    email VARCHAR(100) NOT NULL UNIQUE,
+    cpf   VARCHAR(14)  NOT NULL UNIQUE,
+    senha VARCHAR(255) NOT NULL,
+    data_cadastro DATETIME DEFAULT CURRENT_TIMESTAMP
 );
 
-CREATE TABLE cartao (
-    id_cartao INT AUTO_INCREMENT PRIMARY KEY, 
-    id_usuario INT,                    
-    tipo VARCHAR(50) NOT NULL,
-    saldo DECIMAL(10,2) DEFAULT 0,
-    FOREIGN KEY (id_usuario) REFERENCES usuario(id_usuario)
+CREATE TABLE operadora (
+    id   INT AUTO_INCREMENT PRIMARY KEY,
+    nome VARCHAR(100) NOT NULL
 );
 
-CREATE TABLE coordenada (
-    id_coordenada INT AUTO_INCREMENT PRIMARY KEY,
-    latitude DECIMAL(10,8) NOT NULL,
-    longitude DECIMAL(11,8) NOT NULL,
-    data_hora DATETIME DEFAULT CURRENT_TIMESTAMP
-);
 
 CREATE TABLE linha (
-    id_linha INT AUTO_INCREMENT PRIMARY KEY,
-    inicio VARCHAR(100) NOT NULL,
-    final VARCHAR(100) NOT NULL,
-    nome_linha VARCHAR(100) NOT NULL
+    id           INT AUTO_INCREMENT PRIMARY KEY,
+    numero       VARCHAR(10)  NOT NULL,
+    nome         VARCHAR(100) NOT NULL,
+    cor          VARCHAR(20),
+    operadora_id INT NOT NULL,
+    FOREIGN KEY (operadora_id) REFERENCES operadora(id)
+);
+
+
+
+CREATE TABLE ponto (
+    id       INT AUTO_INCREMENT PRIMARY KEY,
+    nome     VARCHAR(100) NOT NULL,
+    endereco VARCHAR(200) NOT NULL,
+    lat      DECIMAL(10,7) NOT NULL,
+    lng      DECIMAL(10,7) NOT NULL,
+    tipo     VARCHAR(20)  DEFAULT 'regular'  
+);
+
+CREATE TABLE ponto_linha (
+    ponto_id INT NOT NULL,
+    linha_id INT NOT NULL,
+    PRIMARY KEY (ponto_id, linha_id),
+    FOREIGN KEY (ponto_id) REFERENCES ponto(id),
+    FOREIGN KEY (linha_id) REFERENCES linha(id)
+);
+
+
+CREATE TABLE rota (
+    id       INT AUTO_INCREMENT PRIMARY KEY,
+    linha_id INT NOT NULL,
+    sentido  VARCHAR(10) DEFAULT 'ida', 
+    FOREIGN KEY (linha_id) REFERENCES linha(id)
+);
+
+
+CREATE TABLE rota_ponto (
+    rota_id  INT NOT NULL,
+    posicao  INT NOT NULL,  
+    ponto_id INT NOT NULL,
+    PRIMARY KEY (rota_id, posicao),
+    FOREIGN KEY (rota_id)  REFERENCES rota(id),
+    FOREIGN KEY (ponto_id) REFERENCES ponto(id)
+);
+
+
+CREATE TABLE horario (
+    id       INT AUTO_INCREMENT PRIMARY KEY,
+    linha_id INT NOT NULL,
+    dia      VARCHAR(15) NOT NULL,  
+    hora     TIME NOT NULL,
+    FOREIGN KEY (linha_id) REFERENCES linha(id)
+);
+
+
+CREATE TABLE cartao (
+    id            INT AUTO_INCREMENT PRIMARY KEY,
+    usuario_id    INT NOT NULL,
+    numero        VARCHAR(30) NOT NULL,
+    saldo_centavos INT DEFAULT 0,
+    FOREIGN KEY (usuario_id) REFERENCES usuario(id)
 );
 
 
 CREATE TABLE recarga (
-    id_recarga INT AUTO_INCREMENT PRIMARY KEY,
-    id_cartao INT,                          
-    transacao VARCHAR(100) NOT NULL,
-    valor DECIMAL(10,2) NOT NULL,
-    horario DATETIME DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (id_cartao) REFERENCES cartao(id_cartao)
+    id             INT AUTO_INCREMENT PRIMARY KEY,
+    cartao_id      INT NOT NULL,
+    valor_centavos INT NOT NULL,
+    data_recarga   DATETIME DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (cartao_id) REFERENCES cartao(id)
 );
 
-CREATE TABLE historico (
-    id_historico INT AUTO_INCREMENT PRIMARY KEY, 
-    id_cartao INT,                             
-    id_recarga INT,                              
-    horario DATETIME DEFAULT CURRENT_TIMESTAMP,
-    descricao VARCHAR(255) NOT NULL,
-    FOREIGN KEY (id_cartao) REFERENCES cartao(id_cartao),
-    FOREIGN KEY (id_recarga) REFERENCES recarga(id_recarga)
+
+CREATE TABLE passagem (
+    id             INT AUTO_INCREMENT PRIMARY KEY,
+    cartao_id      INT NOT NULL,
+    linha_id       INT NOT NULL,
+    valor_centavos INT NOT NULL,
+    data_uso       DATETIME DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (cartao_id) REFERENCES cartao(id),
+    FOREIGN KEY (linha_id)  REFERENCES linha(id)
 );
 
-CREATE TABLE notificacao (
-    id_notificacao INT AUTO_INCREMENT PRIMARY KEY,
-    id_usuario INT,                                
-    mensagem VARCHAR(255) NOT NULL,
-    lida BOOLEAN DEFAULT FALSE,
-    data DATETIME DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (id_usuario) REFERENCES usuario(id_usuario)
-);
+INSERT INTO operadora (nome) VALUES ('Serttel');
+
+INSERT INTO linha (numero, nome, cor, operadora_id) VALUES
+    ('01', 'Cidade Aracy',      '#1e88e5', 1),
+    ('02', 'Santa Felícia',     'secondary', 1),
+    ('03', 'CECAP',             'tertiary', 1),
+    ('04', 'Vila Prado',        'direct', 1),
+    ('05', 'Centro / Terminal', '#1e88e5', 1),
+    ('06', 'Jardim Botânico',   'secondary', 1);
