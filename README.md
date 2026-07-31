@@ -7,7 +7,9 @@ Funções: Leticia M (Líder, full-stack) Kauan(Design + Front-end) Maria C (Des
 
 Nome do time: Four Sync
 
-Logo: 2
+Logo: 
+<img width="787" height="933" alt="image" src="https://github.com/user-attachments/assets/fb16b830-be80-4fed-b6b3-b45d9548514a" />
+
 
 Nome do projeto: BusPay (ou PasseFacil/BusPass)
 
