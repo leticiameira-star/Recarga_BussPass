@@ -1,5 +1,4 @@
 # Recarga_BussPass
-novo documento de projetos
 
 Integrantes: Kauan, Leticia M, Maria C. e Vitor
 
@@ -14,3 +13,6 @@ Logo:
 Nome do projeto: BusPay (ou PasseFacil/BusPass)
 
 Descrição: Recarga da carteirinha de ônibus de forma online, utilizando um app.
+
+link do kaaban
+https://recargadecredito.atlassian.net/?continue=https%3A%2F%2Frecargadecredito.atlassian.net%2Fwelcome%2Fsoftware%3FprojectId%3D10000&atlOrigin=eyJpIjoiZmE4N2EzMmIwMzFkNDc3ZjhjZDVmZmQxMWY0MjFmMTkiLCJwIjoiamlyYS1zb2Z0d2FyZSJ9
