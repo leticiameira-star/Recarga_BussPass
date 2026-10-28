@@ -35,8 +35,8 @@ Desenvolver uma aplicação web interativa que:
 |---|---|
 | **[Vitor](https://github.com/vtvitor)** | Full-Stack Developer |
 | **[Leticia](https://github.com/leticiamei)** | Full-Stack Developer |
-| **Maria** | Front-End Developer |
-| **Kauan** | UI/UX Designer |
+| **[Maria]** | Front-End Developer |
+| **[Kauan](https://github.com/kauan-cmd-alt)** | UI/UX Designer |
 
 O projeto foi desenvolvido de forma colaborativa, reunindo conhecimentos em desenvolvimento web, integração de sistemas, banco de dados e design de interfaces.
 
