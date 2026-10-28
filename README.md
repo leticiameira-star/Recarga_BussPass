@@ -34,7 +34,7 @@ Desenvolver uma aplicação web interativa que:
 | Integrante | Funções / Responsabilidades |
 |---|---|
 | **[Vitor](https://github.com/vtvitor)** | Full-Stack Developer |
-| **[Leticia](https://github.com/leticiamei)** | Full-Stack Developer |
+| **[Leticia](https://github.com/leticiameira-star)** | Full-Stack Developer |
 | **Maria** | Front-End Developer |
 | **Kauan** | UI/UX Designer |
 
