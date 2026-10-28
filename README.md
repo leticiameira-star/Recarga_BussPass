@@ -34,9 +34,10 @@ Desenvolver uma aplicação web interativa que:
 | Integrante | Funções / Responsabilidades |
 |---|---|
 | **[Vitor](https://github.com/vtvitor)** | Full-Stack Developer |
-| **[Leticia](https://github.com/leticiameira-star)** | Full-Stack Developer |
-| **[Maria](https://github.com/konomi-naruko)** | Front-End Developer |
-| **[Kauan](https://github.com/kauan-cmd-alt)** | UI/UX Designer |
+| **[Leticia](https://github.com/leticiamei)** | Full-Stack Developer |
+| **Maria** | Front-End Developer |
+| **Kauan** | UI/UX Designer |
+
 O projeto foi desenvolvido de forma colaborativa, reunindo conhecimentos em desenvolvimento web, integração de sistemas, banco de dados e design de interfaces.
 
 ---
@@ -53,7 +54,7 @@ O projeto foi desenvolvido de forma colaborativa, reunindo conhecimentos em dese
 | **Banco de Dados** | MySQL |
 | **Persistência** | Spring Data JPA / Hibernate |
 | **Gerenciamento de dependências** | Maven |
-| **Infraestrutura** | Render |
+| **Infraestrutura** | Docker e Render |
 
 A aplicação utiliza uma arquitetura em camadas, separando a interface do usuário, as regras de negócio e a persistência de dados.
 
@@ -70,6 +71,67 @@ A aplicação utiliza uma arquitetura em camadas, separando a interface do usuá
 - **Integração front-end e back-end:** Comunicação entre a interface web e os serviços REST.
 
 > **Nota:** A recarga atualiza o saldo registrado pelo sistema. A integração com pagamentos bancários reais ainda não está incluída nessa descrição como recurso implementado.
+
+---
+
+## 🔌 Protótipo Físico — Eletrônica, RFID e Impressão 3D
+
+Além da plataforma web, o BusPass contempla o **desenvolvimento de um protótipo físico de validação de cartões de transporte**, aproximando o sistema de uma catraca ou terminal eletrônico de ônibus.
+
+### 🧩 Componentes e suas funções
+
+| Componente | Papel no protótipo |
+|---|---|
+| **ESP32** | Microcontrolador previsto para coordenar a leitura de cartão e a comunicação com a aplicação. |
+| **Arduino** | Plataforma utilizada no contexto de desenvolvimento e experimentação de eletrônica embarcada do projeto. |
+| **RFID-RC522** | Leitor de identificação por radiofrequência, destinado a reconhecer um cartão aproximado ao terminal. |
+| **Display TFT/LCD** | Interface visual do terminal, planejada para apresentar informações como leitura, validação e saldo. |
+| **Case impressa em 3D** | Estrutura projetada para acomodar e proteger os componentes eletrônicos. |
+
+### 💳 Leitura e validação do cartão
+
+A proposta de funcionamento do terminal físico é:
+
+1. O passageiro aproxima seu cartão RFID do leitor **RC522**.
+2. O microcontrolador identifica o cartão e transmite sua identificação ao sistema, após a implementação da comunicação.
+3. O back-end consulta o cartão cadastrado e verifica o saldo disponível.
+4. Havendo saldo suficiente, o sistema poderá realizar o **débito da passagem**.
+5. O display poderá apresentar o resultado da operação ao passageiro.
+
+**Base de software existente:** o `CartaoService.java` do back-end já possui um método `debitar` que localiza um cartão pelo número, verifica saldo insuficiente, desconta o valor e salva o novo saldo. Isso **não comprova**, por si só, que a comunicação com o ESP32, o RC522 ou o display já esteja operacional.
+
+### 🖨️ Projeto da case 3D
+
+Nas etapas de modelagem foram desenvolvidas e adaptadas peças em formato **STL** para reunir o leitor RFID-RC522, o ESP32 e o conjunto de display/case:
+
+- Compartimento para o **RFID-RC522**, com área de aproximação do cartão;
+- Espaço interno para acomodar e fixar o **ESP32** de modo discreto;
+- Adaptação da estrutura para receber a tela **TFT/LCD**;
+- Previsão de passagem de cabos e acesso à conexão USB;
+- **Frente plana e lisa, sem relevos**, conforme a definição visual do protótipo;
+- Revisões no posicionamento de furos e pontos de fixação.
+
+As peças foram trabalhadas digitalmente, mas **o encaixe físico, a impressão final e o funcionamento eletrônico integrado não foram confirmados** nas informações disponíveis.
+
+### 🔄 Conexão entre o protótipo e a aplicação
+
+```text
+Cartão RFID
+    ↓
+Leitor RC522
+    ↓
+ESP32 / Eletrônica embarcada
+    ↓  (integração de comunicação prevista)
+API REST — Java / Spring Boot
+    ↓
+Banco de Dados — MySQL
+    ↓
+Verificação e débito de saldo
+    ↓
+Resposta para o terminal / Display TFT-LCD
+```
+
+Essa arquitetura representa **o fluxo planejado para a integração completa**, não uma demonstração de funcionamento ponta a ponta já validado.
 
 ---
 
@@ -118,8 +180,8 @@ A estrutura favorece a manutenção do código e a organização das responsabil
 
 - **Front-End:** [github.com/vtvitor/frontend-projeto](https://github.com/vtvitor/frontend-projeto)
 - **Back-End:** [github.com/vtvitor/backend-projeto](https://github.com/vtvitor/backend-projeto)
-- **Landing-Page:** https://landing-page-wt6o.onrender.com
-
+- **API hospedada no Render:** [backend-projeto-tkvz.onrender.com/api](https://backend-projeto-tkvz.onrender.com/api)
+- **Painel do Render (acesso restrito):** [Dashboard da aplicação](https://dashboard.render.com/static/srv-db7ousbncjis73f31q7g)
 
 ---
 
@@ -142,13 +204,14 @@ A estrutura favorece a manutenção do código e a organização das responsabil
 - Notificações automáticas de saldo baixo.
 - Estimativas de chegada dos ônibus aos pontos.
 - Sugestões de trajetos com base na localização do passageiro.
-- Integração com dispositivos físicos, como ESP32 e leitores RFID, para validação dos cartões.
+- Concluir e testar a comunicação entre o ESP32, o leitor RFID-RC522, o display e a API REST.
+- Validar fisicamente a montagem da case 3D e o processo completo de débito de passagem.
 
 ---
 
 ## 📝 Considerações Finais
 
-O **BusPass** representa uma proposta de modernização da experiência dos usuários do transporte público, reunindo tecnologias de desenvolvimento web, integração de APIs REST e persistência de dados em uma solução voltada à mobilidade urbana.
+O **BusPass** representa uma proposta de modernização da experiência dos usuários do transporte público, reunindo tecnologias de desenvolvimento web, integração de APIs REST, persistência de dados e prototipagem eletrônica em uma solução voltada à mobilidade urbana.
 
 Desenvolvido pela equipe **Four Sync**, o projeto demonstra a aplicação prática de conceitos como programação orientada a objetos, arquitetura em camadas, modelagem de banco de dados, comunicação entre sistemas e desenvolvimento de interfaces.
 
